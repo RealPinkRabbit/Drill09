@@ -122,7 +122,7 @@ class AutoRun:
     @staticmethod
     def do(boy):
         boy.frame = (boy.frame + 1) % 8
-        boy.x += boy.dir * 5
+        boy.x += boy.dir * 10
         if (boy.x < 60):
             boy.x = 60
             boy.dir, boy.action = 1, 1
