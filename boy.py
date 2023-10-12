@@ -2,7 +2,7 @@
 import math
 
 from pico2d import load_image, get_time
-from sdl2 import SDL_KEYDOWN, SDLK_SPACE, SDL_KEYUP, SDLK_RIGHT, SDLK_LEFT
+from sdl2 import SDL_KEYDOWN, SDLK_SPACE, SDL_KEYUP, SDLK_RIGHT, SDLK_LEFT, SDLK_a
 
 
 def space_down(e):
@@ -22,6 +22,9 @@ def left_down(e):
 
 def left_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_LEFT
+
+def a_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_a
 # def time_out_5(e):
 #     return e[0] == 'TIME_OUT' and e[1] == 5.0
 
@@ -103,26 +106,34 @@ class Run:
 class AutoRun:
     @staticmethod
     def enter(boy, e):
-        pass
+        if boy.action == 2:
+            boy.action = 0
+        elif boy.action == 3:
+            boy.action = 1
+        boy.start_time = get_time()  # 경과 시간
+
     @staticmethod
     def exit(boy, e):
         pass
     @staticmethod
     def do(boy):
-        pass
+        boy.frame = (boy.frame + 1) % 8
+        boy.x += boy.dir * 5
+        if get_time() - boy.start_time > 5:
+            boy.state_machine.handle_event(('TIME OUT', 0))
     @staticmethod
     def draw(boy):
-        pass
+        boy.image.clip_draw(boy.frame * 100, boy.action * 100, 100, 100, boy.x, boy.y + 30, 200, 200)
 
 class StateMachine:
     def __init__(self, boy):
         self.boy = boy
         self.cur_state = Idle
         self.table = {  # 딕셔너리 of 딕셔너리 형태
-            Idle: {right_down: Run, left_down: Run, time_out: Sleep},
-            Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle},
-            Sleep: {right_down: Run, left_down: Run, space_down: Idle}
-
+            Idle: {right_down: Run, left_down: Run, right_up: Run, left_up: Run, time_out: Sleep, a_down: AutoRun},
+            Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle, a_down: AutoRun},
+            Sleep: {right_down: Run, left_down: Run, right_up: Run, left_up: Run, space_down: Idle, a_down: AutoRun},
+            AutoRun: {right_down: Run, left_down: Run, time_out: Idle}
         }
 
     def start(self):
@@ -150,6 +161,7 @@ class StateMachine:
 class Boy:
     def __init__(self): #생성자
         self.x, self.y = 400, 90
+        self.dir = 1
         self.frame = 0
         self.action = 3
         self.image = load_image('animation_sheet.png')
