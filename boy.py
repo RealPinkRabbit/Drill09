@@ -100,14 +100,28 @@ class Run:
     def draw(boy):
         boy.image.clip_draw(boy.frame * 100, boy.action * 100, 100, 100, boy.x, boy.y)
 
+class AutoRun:
+    @staticmethod
+    def enter(boy, e):
+        pass
+    @staticmethod
+    def exit(boy, e):
+        pass
+    @staticmethod
+    def do(boy):
+        pass
+    @staticmethod
+    def draw(boy):
+        pass
+
 class StateMachine:
     def __init__(self, boy):
         self.boy = boy
         self.cur_state = Idle
         self.table = {  # 딕셔너리 of 딕셔너리 형태
-            Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, time_out: Sleep},
+            Idle: {right_down: Run, left_down: Run, time_out: Sleep},
             Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle},
-            Sleep: {right_down: Run, left_down: Run, right_up: Run, left_up: Run, space_down: Idle}
+            Sleep: {right_down: Run, left_down: Run, space_down: Idle}
 
         }
 
