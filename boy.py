@@ -38,18 +38,19 @@ class Idle:
             boy.action = 3
         boy.frame = 0
         boy.start_time = get_time() # 경과 시간
-        print('Idle Enter')
+        # print('Idle Enter')
 
     @staticmethod
     def exit(boy, e):
-        print('Idle Exit')
+        pass
+        # print('Idle Exit')
 
     @staticmethod
     def do(boy):
         boy.frame = (boy.frame + 1) % 8
         if get_time() - boy.start_time > 3:
             boy.state_machine.handle_event(('TIME OUT', 0))
-        print('Idle Do')
+        # print('Idle Do')
 
     @staticmethod
     def draw(boy):
@@ -60,16 +61,17 @@ class Sleep:
     @staticmethod
     def enter(boy, e):
         boy.frame = 0
-        print('Lay down')
+        # print('Lay down')
 
     @staticmethod
     def exit(boy, e):
-        print('Stand up')
+        pass
+        # print('Stand up')
 
     @staticmethod
     def do(boy):
         boy.frame = (boy.frame + 1) % 8
-        print('snoring')
+        # print('snoring')
 
     @staticmethod
     def draw(boy):
