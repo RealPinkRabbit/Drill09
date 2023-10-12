@@ -97,6 +97,10 @@ class Run:
     def do(boy):
         boy.frame = (boy.frame + 1) % 8
         boy.x += boy.dir * 5
+        if (boy.x < 30):
+            boy.x = 30
+        elif (boy.x > 800 - 30):
+            boy.x = 800 - 30
         pass
 
     @staticmethod
@@ -119,6 +123,12 @@ class AutoRun:
     def do(boy):
         boy.frame = (boy.frame + 1) % 8
         boy.x += boy.dir * 5
+        if (boy.x < 60):
+            boy.x = 60
+            boy.dir, boy.action = 1, 1
+        elif (boy.x > 800 - 60):
+            boy.x = 800 - 60
+            boy.dir, boy.action = -1, 0
         if get_time() - boy.start_time > 5:
             boy.state_machine.handle_event(('TIME OUT', 0))
     @staticmethod

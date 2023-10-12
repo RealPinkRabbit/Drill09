@@ -49,8 +49,8 @@ def render_world():
         o.draw()
     update_canvas()
 
-
-open_canvas()
+BGI_WIDTH, BGI_HEIGHT = 800, 600
+open_canvas(BGI_WIDTH, BGI_HEIGHT)
 reset_world()
 # game loop
 while running:
